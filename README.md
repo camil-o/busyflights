@@ -108,3 +108,4 @@ Please clone this project then create your own repository from it. Do not fork/b
 **Test**
 
     curl -H "Content-Type: application/json" -X POST -d '{"origin":"PTY", "destination":"BOG"}' localhost:8080/search
+    curl -H "Content-Type: application/json" -X POST -d '{"origin":"BOG","destination":"LAX","departureDate":"2017-07-22"}' localhost:8080/search
