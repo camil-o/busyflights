@@ -25,7 +25,7 @@ public class FakeToughJetService implements SearchService<ToughJetRequest, Tough
         response.setCarrier("Lala Airlines");
         response.setBasePrice(100);
         response.setTax(7);
-        response.setDiscount(1);
+        response.setDiscount(0.05);
         response.setDepartureAirportName(request.getFrom());
         response.setArrivalAirportName(request.getTo());
 

@@ -6,6 +6,9 @@ import com.travix.medusa.busyflights.domain.crazyair.CrazyAirRequest;
 import com.travix.medusa.busyflights.domain.crazyair.CrazyAirResponse;
 import com.travix.medusa.busyflights.service.SearchService;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,12 +50,28 @@ public class CrazyAirAdapter implements SearchService<BusyFlightsRequest, BusyFl
 
         busyFlightsResponse.setDepartureAirportCode(crazyAirResponse.getDepartureAirportCode());
         busyFlightsResponse.setDestinationAirportCode(crazyAirResponse.getDestinationAirportCode());
-        busyFlightsResponse.setDepartureDate(crazyAirResponse.getDepartureDate());
-        busyFlightsResponse.setArrivalDate(crazyAirResponse.getArrivalDate());
+
+        busyFlightsResponse.setDepartureDate(
+                transformDateFormat(crazyAirResponse.getDepartureDate(),
+                        getZoneId(crazyAirResponse.getDepartureAirportCode())));
+        busyFlightsResponse.setArrivalDate(transformDateFormat(
+                crazyAirResponse.getArrivalDate(),
+                getZoneId(crazyAirResponse.getDestinationAirportCode())));
+
         busyFlightsResponse.setAirline(crazyAirResponse.getAirline());
         busyFlightsResponse.setFare(crazyAirResponse.getPrice());
         busyFlightsResponse.setSupplier(SUPPLIER_NAME);
 
         return busyFlightsResponse;
+    }
+
+    private String transformDateFormat(String crazyAirDate, ZoneId zoneId) {
+        LocalDateTime dateTime = LocalDateTime.parse(crazyAirDate);
+        return dateTime.atZone(zoneId).format(DateTimeFormatter.ISO_DATE_TIME);
+    }
+
+    private ZoneId getZoneId(String iataCode) {
+        // TODO: get mapping service
+        return ZoneId.systemDefault();
     }
 }

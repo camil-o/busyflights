@@ -6,6 +6,9 @@ import com.travix.medusa.busyflights.domain.toughjet.ToughJetRequest;
 import com.travix.medusa.busyflights.domain.toughjet.ToughJetResponse;
 import com.travix.medusa.busyflights.service.SearchService;
 
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +18,16 @@ import java.util.stream.Collectors;
 public class ToughJetAdapter implements SearchService<BusyFlightsRequest, BusyFlightsResponse> {
 
     public static final String SUPPLIER_NAME = "ToughJet";
+    /**
+     * Defined centrally, to allow for easy changes to the rounding mode.
+     */
+    private static int ROUNDING_MODE = BigDecimal.ROUND_HALF_EVEN;
+
+    /**
+     * Number of decimals to retain. Also referred to as "scale".
+     */
+    private static int DECIMALS = 2;
+
     private final SearchService<ToughJetRequest, ToughJetResponse> service;
 
     public ToughJetAdapter(SearchService<ToughJetRequest, ToughJetResponse> service) {
@@ -47,16 +60,33 @@ public class ToughJetAdapter implements SearchService<BusyFlightsRequest, BusyFl
 
         busyFlightsResponse.setDepartureAirportCode(toughJetResponse.getDepartureAirportName());
         busyFlightsResponse.setDestinationAirportCode(toughJetResponse.getArrivalAirportName());
-        busyFlightsResponse.setDepartureDate(toughJetResponse.getOutboundDateTime());
-        busyFlightsResponse.setArrivalDate(toughJetResponse.getInboundDateTime());
+
+        busyFlightsResponse.setDepartureDate(
+                transformDateFormat(toughJetResponse.getOutboundDateTime()));
+        busyFlightsResponse.setArrivalDate(
+                transformDateFormat(toughJetResponse.getInboundDateTime()));
+
         busyFlightsResponse.setAirline(toughJetResponse.getCarrier());
         busyFlightsResponse.setFare(calculateFare(toughJetResponse));
+
         busyFlightsResponse.setSupplier(SUPPLIER_NAME);
 
         return busyFlightsResponse;
     }
 
-    private double calculateFare(ToughJetResponse response) {
-        return response.getBasePrice() + response.getTax() - response.getDiscount();
+    private String transformDateFormat(String toughJetDate) {
+        ZonedDateTime dateTime = ZonedDateTime.parse(toughJetDate);
+        return dateTime.format(DateTimeFormatter.ISO_DATE_TIME);
+    }
+
+    private double calculateFare(ToughJetResponse toughJetResponse) {
+        BigDecimal basePrice = new BigDecimal(toughJetResponse.getBasePrice());
+        BigDecimal discountPercentage = new BigDecimal(toughJetResponse.getDiscount());
+        BigDecimal tax = new BigDecimal(toughJetResponse.getTax());
+
+        return basePrice.multiply(BigDecimal.ONE.subtract(discountPercentage))
+                .add(tax)
+                .setScale(DECIMALS, ROUNDING_MODE)
+                .doubleValue();
     }
 }
