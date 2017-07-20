@@ -1,5 +1,8 @@
 package com.travix.medusa.busyflights.domain.busyflights;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BusyFlightsRequest {
 
     private String origin;

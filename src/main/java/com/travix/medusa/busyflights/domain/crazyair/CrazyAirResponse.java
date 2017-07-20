@@ -1,5 +1,8 @@
 package com.travix.medusa.busyflights.domain.crazyair;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CrazyAirResponse {
 
     private String airline;
