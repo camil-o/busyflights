@@ -21,12 +21,12 @@ public class ToughJetAdapter implements SearchService<BusyFlightsRequest, BusyFl
     /**
      * Defined centrally, to allow for easy changes to the rounding mode.
      */
-    private static int ROUNDING_MODE = BigDecimal.ROUND_HALF_EVEN;
+    private static final int ROUNDING_MODE = BigDecimal.ROUND_HALF_EVEN;
 
     /**
      * Number of decimals to retain. Also referred to as "scale".
      */
-    private static int DECIMALS = 2;
+    private static final int DECIMALS = 2;
 
     private final SearchService<ToughJetRequest, ToughJetResponse> service;
 
@@ -80,9 +80,9 @@ public class ToughJetAdapter implements SearchService<BusyFlightsRequest, BusyFl
     }
 
     private double calculateFare(ToughJetResponse toughJetResponse) {
-        BigDecimal basePrice = new BigDecimal(toughJetResponse.getBasePrice());
-        BigDecimal discountPercentage = new BigDecimal(toughJetResponse.getDiscount());
-        BigDecimal tax = new BigDecimal(toughJetResponse.getTax());
+        BigDecimal basePrice = BigDecimal.valueOf(toughJetResponse.getBasePrice());
+        BigDecimal discountPercentage = BigDecimal.valueOf(toughJetResponse.getDiscount());
+        BigDecimal tax = BigDecimal.valueOf(toughJetResponse.getTax());
 
         return basePrice.multiply(BigDecimal.ONE.subtract(discountPercentage))
                 .add(tax)

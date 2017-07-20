@@ -3,7 +3,6 @@ package com.travix.medusa.busyflights.service.busyflights;
 import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsRequest;
 import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsResponse;
 import com.travix.medusa.busyflights.service.SearchService;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ public class AggregateBusyFlightService implements SearchService<BusyFlightsRequ
         return response;
     }
 
-    public void addAggregate(SearchService service) {
+    public void addAggregate(SearchService<BusyFlightsRequest, BusyFlightsResponse> service) {
         aggregates.add(service);
     }
 }

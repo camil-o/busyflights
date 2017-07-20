@@ -2,8 +2,6 @@ package com.travix.medusa.busyflights;
 
 import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsRequest;
 import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsResponse;
-import com.travix.medusa.busyflights.domain.toughjet.ToughJetRequest;
-import com.travix.medusa.busyflights.domain.toughjet.ToughJetResponse;
 import com.travix.medusa.busyflights.service.SearchService;
 import com.travix.medusa.busyflights.service.busyflights.AggregateBusyFlightService;
 import com.travix.medusa.busyflights.service.crazyair.CrazyAirAdapter;
