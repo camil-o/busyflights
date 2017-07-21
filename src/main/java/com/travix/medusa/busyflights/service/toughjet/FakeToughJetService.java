@@ -16,6 +16,9 @@ import java.util.List;
  */
 public class FakeToughJetService extends AbstractFakeSearchService<ToughJetRequest, ToughJetResponse> {
 
+    private static final int MIN_PRICE = 95;
+    private static final int MAX_OVERPRICE = 20;
+
     public FakeToughJetService(IataService iataService) {
         super(iataService);
     }
@@ -32,7 +35,7 @@ public class FakeToughJetService extends AbstractFakeSearchService<ToughJetReque
         ToughJetResponse response = new ToughJetResponse();
 
         response.setCarrier("Lala Airlines");
-        response.setBasePrice(99);
+        response.setBasePrice(MIN_PRICE + getRandomInt(1, MAX_OVERPRICE));
         response.setTax(7);
         response.setDiscount(0.05);
         response.setDepartureAirportName(from);

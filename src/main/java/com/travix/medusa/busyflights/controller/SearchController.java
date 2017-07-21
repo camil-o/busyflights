@@ -5,7 +5,6 @@ import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsResponse;
 import com.travix.medusa.busyflights.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.OrderUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -29,12 +28,19 @@ public class SearchController {
             @RequestParam(value = "sortBy", defaultValue = "fare-asc") String sortBy) {
 
         List<BusyFlightsResponse> response = service.search(request);
-        Collections.sort(response, getComparator(sortBy));
+        Collections.sort(response, getSortComparator(request.getOrigin(), sortBy));
         return response;
     }
 
-    private Comparator<BusyFlightsResponse> getComparator(String sortBy) {
-        Comparator<BusyFlightsResponse> fareCompartor = Comparator.comparingDouble(b -> b.getFare());
-        return sortBy.endsWith("desc") ? fareCompartor.reversed() : fareCompartor;
+    private Comparator<BusyFlightsResponse> getSortComparator(String origin, String sortBy) {
+        Comparator<BusyFlightsResponse> originFirstComparator = Comparator
+                .comparing(b -> !origin.equals(b.getDepartureAirportCode()));
+
+        Comparator<BusyFlightsResponse> fareComparator = Comparator.comparingDouble(b -> b.getFare());
+        if(sortBy.endsWith("desc")) {
+            fareComparator = fareComparator.reversed();
+        }
+
+        return originFirstComparator.thenComparing(fareComparator);
     }
 }
