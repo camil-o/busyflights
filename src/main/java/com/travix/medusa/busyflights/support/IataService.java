@@ -1,4 +1,4 @@
-package com.travix.medusa.busyflights.service;
+package com.travix.medusa.busyflights.support;
 
 import java.time.ZoneId;
 

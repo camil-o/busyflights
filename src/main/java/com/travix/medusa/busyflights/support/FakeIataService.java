@@ -1,6 +1,4 @@
-package com.travix.medusa.busyflights.service.busyflights;
-
-import com.travix.medusa.busyflights.service.IataService;
+package com.travix.medusa.busyflights.support;
 
 import java.time.ZoneId;
 import java.util.HashMap;

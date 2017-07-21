@@ -2,10 +2,10 @@ package com.travix.medusa.busyflights;
 
 import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsRequest;
 import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsResponse;
-import com.travix.medusa.busyflights.service.IataService;
+import com.travix.medusa.busyflights.support.IataService;
 import com.travix.medusa.busyflights.service.SearchService;
 import com.travix.medusa.busyflights.service.busyflights.AggregateBusyFlightService;
-import com.travix.medusa.busyflights.service.busyflights.FakeIataService;
+import com.travix.medusa.busyflights.support.FakeIataService;
 import com.travix.medusa.busyflights.service.crazyair.CrazyAirAdapter;
 import com.travix.medusa.busyflights.service.crazyair.FakeCrazyAirService;
 import com.travix.medusa.busyflights.service.toughjet.FakeToughJetService;
@@ -31,7 +31,7 @@ public class BusyFlightsApplication {
 
 	@Bean
 	public SearchService<BusyFlightsRequest, BusyFlightsResponse> crazyAirAdapter() {
-		return new CrazyAirAdapter(new FakeCrazyAirService(), iataService());
+		return new CrazyAirAdapter(new FakeCrazyAirService(iataService()));
 	}
 
 	@Bean
